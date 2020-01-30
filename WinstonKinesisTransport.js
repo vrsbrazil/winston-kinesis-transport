@@ -11,10 +11,10 @@ const dependencies = {
 const LOGGED = 'logged'
 
 class WinstonKinesisTransport extends Transport {
-  constructor ({ options }, injection) {
+  constructor (options) {
     super(options)
-    const { log, random, putRecord } = Object.assign({}, dependencies, injection)
-    this.injection = { log, random, putRecord }
+    const { log, random, putRecord } = Object.assign({}, dependencies)
+    this.injection = { random, putRecord }
     this.options = options
   }
 
@@ -23,35 +23,20 @@ class WinstonKinesisTransport extends Transport {
     callback(null, data)
   }
 
-  log(info, callback) {
+  async log(info, callback) {
     setImmediate(() => {
       this.emit('logged', info);
     });
 
-    // Perform the writing to the remote service
-
-    callback();
-  }
-
-  async log (level, message, meta, callback) {
-    const { transformer } = this.options
-
     const options = Object.assign({
       showLevel: true,
       timestamp: true,
-
-      level,
-      message
+      level: info.level,
+      message: info.message
     }, this.options)
 
-    if(transformer && meta){
-      options.meta = transformer(meta)
-    }
-
-    const output = this.injection.log(options)
-
     const kinesisObject = {
-      data: output,
+      data: JSON.stringify(info),
       partitionKey: `${this.injection.random()}`,
       streamName: this.options.streamName,
       configuration: this.options.configuration
@@ -63,6 +48,9 @@ class WinstonKinesisTransport extends Transport {
     } catch (error) {
       callback(error)
     }
+
+    // Perform the writing to the remote service
+    callback();
   }
 }
 

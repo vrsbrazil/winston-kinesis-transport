@@ -1,6 +1,6 @@
 {
   "name": "@vrsbrazil/winston-kinesis-transport",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Transport created for Winston using AWS Kinesis",
   "main": "WinstonKinesisTransport.js",
   "scripts": {
