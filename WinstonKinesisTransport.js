@@ -23,6 +23,16 @@ class WinstonKinesisTransport extends Transport {
     callback(null, data)
   }
 
+  log(info, callback) {
+    setImmediate(() => {
+      this.emit('logged', info);
+    });
+
+    // Perform the writing to the remote service
+
+    callback();
+  }
+
   async log (level, message, meta, callback) {
     const { transformer } = this.options
 
@@ -31,9 +41,13 @@ class WinstonKinesisTransport extends Transport {
       timestamp: true,
 
       level,
-      message,
-      meta: transformer(meta)
+      message
     }, this.options)
+
+    if(transformer && meta){
+      options.meta = transformer(meta)
+    }
+
     const output = this.injection.log(options)
 
     const kinesisObject = {
