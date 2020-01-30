@@ -44,7 +44,6 @@ class WinstonKinesisTransport extends Transport {
 
     try {
       const data = await this.injection.putRecord(kinesisObject)
-      this.onSuccess(data, callback)
     } catch (error) {
       callback(error)
     }

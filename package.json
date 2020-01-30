@@ -1,6 +1,6 @@
 {
   "name": "@vrsbrazil/winston-kinesis-transport",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Transport created for Winston using AWS Kinesis",
   "main": "WinstonKinesisTransport.js",
   "scripts": {
@@ -24,8 +24,7 @@
   "license": "ISC",
   "peerDependencies": {
     "aws-sdk": ">=2.610.0",
-    "winston": ">=3.2.1",
-    "es6-promisify": "^6.0.2"
+    "winston": ">=3.2.1"
   },
   "devDependencies": {
     "aws-sdk": "^2.610.0",
